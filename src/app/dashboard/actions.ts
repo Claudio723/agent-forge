@@ -256,6 +256,34 @@ export async function deleteProject(id: string) {
   redirect("/dashboard/projects");
 }
 
+export async function linkNoteToProject(projectId: string, noteId: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("project_notes").insert({ project_id: projectId, note_id: noteId });
+  if (error) return { error: error.message };
+  revalidatePath(`/dashboard/projects/${projectId}`);
+  return { success: true };
+}
+
+export async function unlinkNoteFromProject(projectId: string, noteId: string) {
+  const supabase = await createClient();
+  await supabase.from("project_notes").delete().eq("project_id", projectId).eq("note_id", noteId);
+  revalidatePath(`/dashboard/projects/${projectId}`);
+}
+
+export async function linkVaultToProject(projectId: string, vaultId: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("project_vault").insert({ project_id: projectId, vault_id: vaultId });
+  if (error) return { error: error.message };
+  revalidatePath(`/dashboard/projects/${projectId}`);
+  return { success: true };
+}
+
+export async function unlinkVaultFromProject(projectId: string, vaultId: string) {
+  const supabase = await createClient();
+  await supabase.from("project_vault").delete().eq("project_id", projectId).eq("vault_id", vaultId);
+  revalidatePath(`/dashboard/projects/${projectId}`);
+}
+
 // ============================================================================
 // API Vault CRUD
 // ============================================================================
