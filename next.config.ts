@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Allow Supabase images in next/image
+  serverExternalPackages: ["@supabase/supabase-js", "@supabase/ssr"],
   images: {
     remotePatterns: [
       {
