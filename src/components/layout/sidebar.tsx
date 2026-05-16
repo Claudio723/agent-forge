@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
 import {
   LayoutDashboard,
   StickyNote,
@@ -43,52 +42,46 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "flex h-full flex-col border-r bg-sidebar transition-all duration-300",
-        collapsed ? "w-16" : "w-60",
+        "flex h-full flex-col border-r border-sidebar-border bg-sidebar transition-all duration-300",
+        collapsed ? "w-[68px]" : "w-60",
       )}
     >
       {/* Logo */}
-      <div className="flex h-14 items-center gap-3 border-b px-3">
-        <Sparkles className="size-5 shrink-0 text-primary" />
+      <div className="flex h-14 items-center gap-3 border-b border-sidebar-border px-3">
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <Sparkles className="size-4" />
+        </div>
         {!collapsed && (
-          <span className="text-sm font-semibold tracking-tight">
-            AgentForge
-          </span>
+          <span className="text-sm font-bold tracking-tight">AgentForge</span>
         )}
         <Button
           variant="ghost"
           size="icon"
-          className="ml-auto shrink-0"
+          className="ml-auto size-7 shrink-0"
           onClick={() => setCollapsed(!collapsed)}
         >
-          {collapsed ? (
-            <ChevronRight className="size-4" />
-          ) : (
-            <ChevronLeft className="size-4" />
-          )}
+          {collapsed ? <ChevronRight className="size-3.5" /> : <ChevronLeft className="size-3.5" />}
         </Button>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-1 p-2">
+      <nav className="flex-1 space-y-0.5 p-2">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive =
-            pathname === item.href ||
-            (item.href !== "/dashboard" && pathname.startsWith(item.href));
+          const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
 
           return (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
                 isActive
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                  : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground",
+                  ? "bg-primary/10 text-primary shadow-sm ring-1 ring-primary/10"
+                  : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground",
               )}
             >
-              <Icon className="size-4 shrink-0" />
+              <Icon className={cn("size-4 shrink-0", isActive && "text-primary")} />
               {!collapsed && <span>{item.label}</span>}
             </Link>
           );
@@ -96,25 +89,23 @@ export function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="border-t p-2 space-y-1">
+      <div className="border-t border-sidebar-border p-2 space-y-0.5">
         <Link
           href="/dashboard/settings"
           className={cn(
-            "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+            "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
             pathname === "/dashboard/settings"
               ? "bg-sidebar-accent text-sidebar-accent-foreground"
-              : "text-sidebar-foreground hover:bg-sidebar-accent/50",
+              : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground",
           )}
         >
           <Settings className="size-4 shrink-0" />
           {!collapsed && <span>Settings</span>}
         </Link>
 
-        {!collapsed && <ThemeToggle />}
-
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground/60 transition-colors hover:bg-destructive/10 hover:text-destructive"
         >
           <LogOut className="size-4 shrink-0" />
           {!collapsed && <span>Logout</span>}
