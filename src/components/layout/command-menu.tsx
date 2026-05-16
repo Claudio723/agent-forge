@@ -22,6 +22,7 @@ import {
   LogOut,
   Sun,
   Moon,
+  Plus,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { logout } from "@/app/(auth)/actions";
@@ -88,6 +89,19 @@ export function CommandMenu() {
           <CommandItem onSelect={() => navigate("/dashboard/settings")}>
             <Settings className="mr-2 size-4" />
             Settings
+          </CommandItem>
+        </CommandGroup>
+        <CommandSeparator />
+        <CommandGroup heading="Quick Actions">
+          <CommandItem onSelect={() => navigate("/dashboard/notes/new")}>
+            <Plus className="mr-2 size-4" />
+            New Note
+            <span className="ml-auto text-xs text-muted-foreground">⌘N</span>
+          </CommandItem>
+          <CommandItem onSelect={() => navigate("/dashboard/prompt-builder")}>
+            <Sparkles className="mr-2 size-4" />
+            Prompt Builder
+            <span className="ml-auto text-xs text-muted-foreground">⌘P</span>
           </CommandItem>
         </CommandGroup>
         <CommandSeparator />

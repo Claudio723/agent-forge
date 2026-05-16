@@ -579,3 +579,83 @@ export async function seedDemoData() {
   revalidatePath("/dashboard");
   return { success: true };
 }
+
+// ============================================================================
+// Profile & Settings (Phase 4)
+// ============================================================================
+
+export async function updateProfile(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated" };
+
+  const full_name = (formData.get("full_name") as string) || null;
+  const avatar_url = (formData.get("avatar_url") as string) || null;
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ full_name, avatar_url })
+    .eq("id", user.id);
+
+  if (error) return { error: error.message };
+  revalidatePath("/dashboard/settings");
+  return { success: true };
+}
+
+export async function exportData(format: "markdown" | "json") {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not authenticated" };
+
+  const [
+    { data: notes },
+    { data: skills },
+    { data: projects },
+  ] = await Promise.all([
+    supabase.from("notes").select("*").eq("user_id", user.id),
+    supabase.from("skills_mcps").select("*").eq("user_id", user.id),
+    supabase.from("projects").select("*").eq("user_id", user.id),
+  ]);
+
+  if (format === "json") {
+    return { data: JSON.stringify({ notes, skills, projects }, null, 2), type: "application/json" };
+  }
+
+  // Markdown export
+  let md = `# AgentForge Export\n\nExported: ${new Date().toISOString()}\n\n`;
+
+  md += `## Skills & MCPs (${skills?.length || 0})\n\n`;
+  if (skills) {
+    for (const s of skills) {
+      md += `### ${s.name} (${s.type})\n`;
+      md += `${s.description || "No description"}\n\n`;
+      if (s.config && Object.keys(s.config).length > 0) {
+        md += "```json\n" + JSON.stringify(s.config, null, 2) + "\n```\n\n";
+      }
+    }
+  }
+
+  md += `## Projects (${projects?.length || 0})\n\n`;
+  if (projects) {
+    for (const p of projects) {
+      md += `### ${p.name} (${p.status})\n${p.description || ""}\n\n`;
+    }
+  }
+
+  md += `## Notes (${notes?.length || 0})\n\n`;
+  if (notes) {
+    for (const n of notes) {
+      md += `### ${n.title}\n`;
+      if (n.mood) md += `*Mood: ${n.mood}*  \n`;
+      if (n.category) md += `*Category: ${n.category}*  \n`;
+      if (n.tags?.length) md += `*Tags: ${n.tags.join(", ")}*  \n`;
+      md += `\n${n.content || ""}\n\n---\n\n`;
+    }
+  }
+
+  return { data: md, type: "text/markdown" };
+}
