@@ -10,7 +10,11 @@ export async function createClient() {
     {
       cookies: {
         getAll() {
-          return cookieStore.getAll();
+          try {
+            return cookieStore.getAll();
+          } catch {
+            return [];
+          }
         },
         setAll(cookiesToSet) {
           try {
@@ -18,7 +22,7 @@ export async function createClient() {
               cookieStore.set(name, value, options),
             );
           } catch {
-            // Called from a Server Component — safe to ignore.
+            // Safe to ignore in edge/serverless contexts
           }
         },
       },
@@ -35,7 +39,11 @@ export async function createServiceClient() {
     {
       cookies: {
         getAll() {
-          return cookieStore.getAll();
+          try {
+            return cookieStore.getAll();
+          } catch {
+            return [];
+          }
         },
         setAll(cookiesToSet) {
           try {
@@ -43,7 +51,7 @@ export async function createServiceClient() {
               cookieStore.set(name, value, options),
             );
           } catch {
-            // Called from a Server Component — safe to ignore.
+            // Safe to ignore in edge/serverless contexts
           }
         },
       },
