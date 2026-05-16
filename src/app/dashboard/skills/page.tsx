@@ -1,9 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Wrench, Puzzle } from "lucide-react";
+import { Wrench, Puzzle } from "lucide-react";
+import { QuickCreate } from "@/components/quick-create";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +19,7 @@ export default async function SkillsPage() {
           <h1 className="text-2xl font-semibold tracking-tight">Skills &amp; MCPs</h1>
           <p className="text-sm text-muted-foreground">Your AI tool library</p>
         </div>
-        <Button render={<Link href="/dashboard/skills/new" />}><Plus />Add Tool</Button>
+        <QuickCreate type="skill" />
       </div>
 
       {!skills || skills.length === 0 ? (
@@ -27,7 +27,7 @@ export default async function SkillsPage() {
           <CardContent className="flex h-48 flex-col items-center justify-center gap-3">
             <Wrench className="size-10 text-muted-foreground/30" />
             <p className="text-sm text-muted-foreground">No skills or MCPs yet</p>
-            <Button variant="outline" size="sm" render={<Link href="/dashboard/skills/new" />}><Plus />Add your first tool</Button>
+            <QuickCreate type="skill" />
           </CardContent>
         </Card>
       ) : (
@@ -38,7 +38,7 @@ export default async function SkillsPage() {
                 <CardHeader>
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-2">
-                      {skill.type === "mcp" ? <Puzzle className="size-5 text-blue-500" /> : <Wrench className="size-5 text-primary" />}
+                      {skill.type === "mcp" ? <Puzzle className="size-5 text-blue-500" /> : <Wrench className="size-5" />}
                       <CardTitle className="text-base">{skill.name}</CardTitle>
                     </div>
                     <Badge variant="secondary" className="text-xs capitalize">{skill.type}</Badge>
