@@ -2,6 +2,9 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { EditNoteForm } from "./form";
 
+
+export const dynamic = "force-dynamic";
+
 export default async function NoteDetailPage({
   params,
 }: {

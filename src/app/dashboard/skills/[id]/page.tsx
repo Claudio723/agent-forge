@@ -6,6 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Wrench, Puzzle } from "lucide-react";
 import { DeleteSkillButton } from "./delete-button";
 
+
+export const dynamic = "force-dynamic";
+
 export default async function SkillDetailPage({
   params,
 }: {

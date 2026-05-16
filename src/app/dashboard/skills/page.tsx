@@ -10,6 +10,9 @@ import {
 } from "@/components/ui/card";
 import { Plus, Wrench, Puzzle, BadgeCheck } from "lucide-react";
 
+
+export const dynamic = "force-dynamic";
+
 export default async function SkillsPage() {
   const supabase = await createClient();
   const {

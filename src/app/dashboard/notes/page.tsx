@@ -12,6 +12,9 @@ import { Plus, StickyNote, Search, Tag } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { DeleteNoteButton } from "./delete-button";
 
+
+export const dynamic = "force-dynamic";
+
 export default async function NotesPage({
   searchParams,
 }: {

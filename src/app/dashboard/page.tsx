@@ -12,6 +12,9 @@ import {
 import Link from "next/link";
 import { SeedButton } from "@/components/seed-button";
 
+
+export const dynamic = "force-dynamic";
+
 async function getStats() {
   const supabase = await createClient();
   const {
