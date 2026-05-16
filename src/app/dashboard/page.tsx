@@ -1,9 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { StickyNote, Wrench, FolderKanban, Sparkles, Plus, Key, TrendingUp } from "lucide-react";
+import { StickyNote, Wrench, FolderKanban, Sparkles, Key, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { SeedButton } from "@/components/seed-button";
+import { QuickCreate } from "@/components/quick-create";
 
 async function getStats() {
   const supabase = await createClient();
@@ -79,15 +79,10 @@ export default async function DashboardPage() {
           Quick Actions
         </h2>
         <div className="flex flex-wrap gap-3">
-          <Button size="lg" render={<Link href="/dashboard/notes/new" />}>
-            <Plus className="mr-2 size-4" />New Note
-          </Button>
-          <Button variant="secondary" size="lg" render={<Link href="/dashboard/prompt-builder" />}>
-            <Sparkles className="mr-2 size-4" />Prompt Builder
-          </Button>
-          <Button variant="secondary" size="lg" render={<Link href="/dashboard/skills/new" />}>
-            <Wrench className="mr-2 size-4" />Add Skill
-          </Button>
+          <QuickCreate type="note" />
+          <QuickCreate type="skill" />
+          <QuickCreate type="project" />
+          <QuickCreate type="vault" />
         </div>
       </div>
 
