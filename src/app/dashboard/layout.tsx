@@ -1,34 +1,24 @@
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { Onboarding } from "@/components/onboarding";
+import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Auth is handled by proxy.ts — this is a safety net
+  let user = null;
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.auth.getUser();
+    user = data.user;
+  } catch {
+    // If cookies() fails on edge, let the page handle it
+  }
 
   if (!user) {
     redirect("/login");
   }
 
-  // Check if user has onboarded (has a name set)
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("full_name")
-    .eq("id", user.id)
-    .single();
-
-  const hasName = !!profile?.full_name;
-
-  return (
-    <>
-      <Onboarding hasName={hasName} />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }
