@@ -1,5 +1,5 @@
 [build]
-  command = "npm install --include=dev && npm run build"
+  command = "npm install --include=dev && next build --webpack"
 
 [build.environment]
   NEXT_PUBLIC_SUPABASE_URL = "https://tumxurqagpcciwzqkgkr.supabase.co"
@@ -8,15 +8,3 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-
-# Catch-all for Next.js dynamic routes
-[[redirects]]
-  from = "/_next/*"
-  to = "/_next/:splat"
-  status = 200
-
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/___netlify-handler"
-  status = 200
-  force = false
