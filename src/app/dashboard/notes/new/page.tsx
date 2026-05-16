@@ -4,14 +4,10 @@ import { useActionState } from "react";
 import { createNote } from "@/app/dashboard/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 
@@ -19,82 +15,48 @@ const moods = ["excited", "productive", "curious", "focused", "reflective"];
 
 export default function NewNotePage() {
   const [state, formAction, pending] = useActionState(
-    async (_prevState: { error?: string } | null, formData: FormData) =>
-      createNote(formData),
+    async (_prev: { error?: string } | null, formData: FormData) => createNote(formData),
     null,
   );
 
   return (
-    <div className="p-6 space-y-6 max-w-2xl">
+    <div className="mx-auto max-w-2xl p-6 space-y-6">
       <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon" render={<Link href="/dashboard/notes" />}>
-          <ArrowLeft className="size-4" />
-        </Button>
+        <Button variant="ghost" size="icon" render={<Link href="/dashboard/notes" />}><ArrowLeft /></Button>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">New Note</h1>
-          <p className="text-muted-foreground">Capture an idea, thought, or insight</p>
+          <h1 className="text-2xl font-semibold tracking-tight">New Note</h1>
+          <p className="text-sm text-muted-foreground">Capture an idea, thought, or insight</p>
         </div>
       </div>
-
-      <form action={formAction} className="space-y-6">
+      <Separator />
+      <form action={formAction} className="space-y-8">
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="title">Title</Label>
+            <Input id="title" name="title" required placeholder="What's on your mind?" />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2"><Label htmlFor="category">Category</Label><Input id="category" name="category" placeholder="e.g. ideas, tips, research" /></div>
+            <div className="space-y-2"><Label htmlFor="tags">Tags</Label><Input id="tags" name="tags" placeholder="comma, separated" /></div>
+          </div>
+          <div className="space-y-2">
+            <Label>Mood</Label>
+            <div className="flex flex-wrap gap-1.5">
+              {moods.map((m) => (
+                <label key={m}>
+                  <input type="radio" name="mood" value={m} className="peer sr-only" />
+                  <span className="inline-flex cursor-pointer items-center rounded-md border px-3 py-1.5 text-sm transition-colors peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary hover:bg-muted">{m}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
         <Card>
-          <CardHeader>
-            <CardTitle>Details</CardTitle>
-            <CardDescription>Title and categorization</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="title" className="text-sm font-medium">Title</label>
-              <Input id="title" name="title" required placeholder="What's on your mind?" />
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <label htmlFor="category" className="text-sm font-medium">Category</label>
-                <Input id="category" name="category" placeholder="e.g. ideas, tips, research" />
-              </div>
-              <div className="space-y-2">
-                <label htmlFor="tags" className="text-sm font-medium">Tags</label>
-                <Input id="tags" name="tags" placeholder="comma, separated" />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Mood</label>
-              <div className="flex flex-wrap gap-2">
-                {moods.map((m) => (
-                  <label key={m} className="flex items-center gap-1.5">
-                    <input type="radio" name="mood" value={m} className="size-3.5" />
-                    <span className="text-sm capitalize">{m}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          </CardContent>
+          <CardHeader className="pb-3"><CardTitle className="text-base">Content</CardTitle><CardDescription>Write in Markdown or plain text</CardDescription></CardHeader>
+          <CardContent><Textarea id="content" name="content" placeholder="Start writing..." className="min-h-[240px]" /></CardContent>
         </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Content</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Textarea
-              id="content"
-              name="content"
-              placeholder="Write your note..."
-              className="min-h-[200px]"
-            />
-          </CardContent>
-        </Card>
-
-        {state && "error" in state && (
-          <p className="text-sm text-destructive">{state.error}</p>
-        )}
-
-        <Button type="submit" disabled={pending}>
-          <Save className="mr-2 size-4" />
-          {pending ? "Saving..." : "Save Note"}
-        </Button>
+        {state && "error" in state && <p className="text-sm text-destructive">{state.error}</p>}
+        <div className="flex justify-end"><Button type="submit" disabled={pending} size="lg"><Save />{pending ? "Saving..." : "Save Note"}</Button></div>
       </form>
     </div>
   );
