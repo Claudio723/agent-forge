@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { updateProfile, exportData } from "@/app/(dashboard)/actions";
+import { updateProfile, exportData } from "@/app/dashboard/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

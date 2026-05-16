@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sparkles, Wrench, ArrowRight } from "lucide-react";
-import { updateProfile, createSkill } from "@/app/(dashboard)/actions";
+import { updateProfile, createSkill } from "@/app/dashboard/actions";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface OnboardingProps {

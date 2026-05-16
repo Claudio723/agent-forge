@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteSkill } from "@/app/(dashboard)/actions";
+import { deleteSkill } from "@/app/dashboard/actions";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";

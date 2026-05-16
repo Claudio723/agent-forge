@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { matchSkillsToGoal, generatePrompt, type SkillMatch } from "@/app/(dashboard)/actions";
+import { matchSkillsToGoal, generatePrompt, type SkillMatch } from "@/app/dashboard/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";

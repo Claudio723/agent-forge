@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { createSkill } from "@/app/(dashboard)/actions";
+import { createSkill } from "@/app/dashboard/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";

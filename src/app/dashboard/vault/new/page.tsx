@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { createVaultEntry } from "@/app/(dashboard)/actions";
+import { createVaultEntry } from "@/app/dashboard/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Save, Shield } from "lucide-react";

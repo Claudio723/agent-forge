@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { updateNote, deleteNote } from "@/app/(dashboard)/actions";
+import { createNote } from "@/app/dashboard/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,42 +12,28 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowLeft, Save, Trash2 } from "lucide-react";
+import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 
 const moods = ["excited", "productive", "curious", "focused", "reflective"];
 
-interface Note {
-  id: string;
-  title: string;
-  content: string;
-  category: string | null;
-  tags: string[];
-  mood: string | null;
-}
-
-export function EditNoteForm({ note }: { note: Note }) {
-  const updateAction = async (
-    _prevState: { error?: string } | null,
-    formData: FormData,
-  ) => updateNote(note.id, formData);
-  const [state, formAction, pending] = useActionState(updateAction, null);
+export default function NewNotePage() {
+  const [state, formAction, pending] = useActionState(
+    async (_prevState: { error?: string } | null, formData: FormData) =>
+      createNote(formData),
+    null,
+  );
 
   return (
-    <>
+    <div className="p-6 space-y-6 max-w-2xl">
       <div className="flex items-center gap-3">
         <Button variant="ghost" size="icon" render={<Link href="/dashboard/notes" />}>
           <ArrowLeft className="size-4" />
         </Button>
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold tracking-tight">Edit Note</h1>
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">New Note</h1>
+          <p className="text-muted-foreground">Capture an idea, thought, or insight</p>
         </div>
-        <form action={deleteNote.bind(null, note.id)}>
-          <Button variant="destructive" size="sm">
-            <Trash2 className="mr-2 size-3.5" />
-            Delete
-          </Button>
-        </form>
       </div>
 
       <form action={formAction} className="space-y-6">
@@ -59,22 +45,17 @@ export function EditNoteForm({ note }: { note: Note }) {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <label htmlFor="title" className="text-sm font-medium">Title</label>
-              <Input id="title" name="title" required defaultValue={note.title} />
+              <Input id="title" name="title" required placeholder="What's on your mind?" />
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <label htmlFor="category" className="text-sm font-medium">Category</label>
-                <Input id="category" name="category" defaultValue={note.category || ""} />
+                <Input id="category" name="category" placeholder="e.g. ideas, tips, research" />
               </div>
               <div className="space-y-2">
                 <label htmlFor="tags" className="text-sm font-medium">Tags</label>
-                <Input
-                  id="tags"
-                  name="tags"
-                  defaultValue={note.tags?.join(", ") || ""}
-                  placeholder="comma, separated"
-                />
+                <Input id="tags" name="tags" placeholder="comma, separated" />
               </div>
             </div>
 
@@ -83,13 +64,7 @@ export function EditNoteForm({ note }: { note: Note }) {
               <div className="flex flex-wrap gap-2">
                 {moods.map((m) => (
                   <label key={m} className="flex items-center gap-1.5">
-                    <input
-                      type="radio"
-                      name="mood"
-                      value={m}
-                      defaultChecked={note.mood === m}
-                      className="size-3.5"
-                    />
+                    <input type="radio" name="mood" value={m} className="size-3.5" />
                     <span className="text-sm capitalize">{m}</span>
                   </label>
                 ))}
@@ -106,7 +81,7 @@ export function EditNoteForm({ note }: { note: Note }) {
             <Textarea
               id="content"
               name="content"
-              defaultValue={note.content || ""}
+              placeholder="Write your note..."
               className="min-h-[200px]"
             />
           </CardContent>
@@ -118,9 +93,9 @@ export function EditNoteForm({ note }: { note: Note }) {
 
         <Button type="submit" disabled={pending}>
           <Save className="mr-2 size-4" />
-          {pending ? "Saving..." : "Save Changes"}
+          {pending ? "Saving..." : "Save Note"}
         </Button>
       </form>
-    </>
+    </div>
   );
 }

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sprout } from "lucide-react";
-import { seedDemoData } from "@/app/(dashboard)/actions";
+import { seedDemoData } from "@/app/dashboard/actions";
 import { toast } from "sonner";
 
 export function SeedButton() {
